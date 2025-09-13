@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,15 +18,16 @@ public class BurgerReceiptTest {
     public void setUp() {
         burger = new Burger();
 
-        //Моки
+        // Создаем моки
         bunMock = mock(Bun.class);
         ingredient1Mock = mock(Ingredient.class);
         ingredient2Mock = mock(Ingredient.class);
 
-        //Настройка моков
+        // Настройка моков: булка
         when(bunMock.getPrice()).thenReturn(100f);
         when(bunMock.getName()).thenReturn("Test Bun");
 
+        // Настройка моков: ингредиенты
         when(ingredient1Mock.getPrice()).thenReturn(50f);
         when(ingredient1Mock.getName()).thenReturn("Cheese");
         when(ingredient1Mock.getType()).thenReturn(IngredientType.FILLING);
@@ -36,34 +36,29 @@ public class BurgerReceiptTest {
         when(ingredient2Mock.getName()).thenReturn("Ketchup");
         when(ingredient2Mock.getType()).thenReturn(IngredientType.SAUCE);
 
-        //Сборка бургера
+        // Собираем бургер
         burger.setBuns(bunMock);
         burger.addIngredient(ingredient1Mock);
         burger.addIngredient(ingredient2Mock);
     }
 
     @Test
-    public void testGetReceiptContainsBunName() {
-        String receipt = burger.getReceipt();
-        assertTrue("Чек должен содержать имя булки", receipt.contains("Test Bun"));
+    public void testGetReceiptFullText() {
+        // Формируем ожидаемый рецепт
+        String expectedReceipt = String.format(
+                "(==== %s ====)%n" +
+                        "= %s %s =%n" +
+                        "= %s %s =%n" +
+                        "(==== %s ====)%n" +
+                        "%nPrice: %f%n",
+                bunMock.getName(),
+                ingredient1Mock.getType().toString().toLowerCase(), ingredient1Mock.getName(),
+                ingredient2Mock.getType().toString().toLowerCase(), ingredient2Mock.getName(),
+                bunMock.getName(),
+                burger.getPrice()
+        );
+
+        String actualReceipt = burger.getReceipt();
+        assertEquals("Рецепт бургера сформирован неверно", expectedReceipt, actualReceipt);
     }
-
-    @Test
-    public void testGetReceiptContainsIngredients() {
-        String receipt = burger.getReceipt();
-        assertTrue("Чек должен содержать имя ингредиента Cheese", receipt.contains("Cheese"));
-        assertTrue("Чек должен содержать имя ингредиента Ketchup", receipt.contains("Ketchup"));
-    }
-
-    @Test
-    public void testGetReceiptContainsPrice() {
-        String receipt = burger.getReceipt();
-        float expectedPrice = 2 * 100f + 50f + 30f; // 2*булка + ингредиенты
-
-        assertEquals("Итоговая цена в чеке должна совпадать", expectedPrice, burger.getPrice(), 0.001f);
-
-        String priceLine = String.format("Price: %.1f", expectedPrice);
-        assertTrue("Чек должен содержать итоговую цену", receipt.contains(priceLine));
-    }
-
 }
