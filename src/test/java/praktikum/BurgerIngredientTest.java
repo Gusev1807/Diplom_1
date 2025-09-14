@@ -10,125 +10,126 @@ import static org.mockito.Mockito.when;
 
 public class BurgerIngredientTest {
 
-    private static final int FIRST_INDEX = 0;
-    private static final int SECOND_INDEX = 1;
-    private static final int THIRD_INDEX = 2;
+    // Индексы ингредиентов по смыслу
+    private static final int CHEESE_INDEX = 0;
+    private static final int LETTUCE_INDEX = 1;
+    private static final int TOMATO_INDEX = 2;
     private static final int INVALID_INDEX = 5;
 
     private Burger burger;
-    private Ingredient ingredient1Mock;
-    private Ingredient ingredient2Mock;
-    private Ingredient ingredient3Mock;
+    private Ingredient cheeseMock;
+    private Ingredient lettuceMock;
+    private Ingredient tomatoMock;
 
     @Before
     public void setUp() {
         burger = new Burger();
 
         // Создаем моки ингредиентов
-        ingredient1Mock = mock(Ingredient.class);
-        ingredient2Mock = mock(Ingredient.class);
-        ingredient3Mock = mock(Ingredient.class);
+        cheeseMock = mock(Ingredient.class);
+        lettuceMock = mock(Ingredient.class);
+        tomatoMock = mock(Ingredient.class);
 
         // Настройка имен
-        when(ingredient1Mock.getName()).thenReturn("Cheese");
-        when(ingredient2Mock.getName()).thenReturn("Lettuce");
-        when(ingredient3Mock.getName()).thenReturn("Tomato");
+        when(cheeseMock.getName()).thenReturn("Cheese");
+        when(lettuceMock.getName()).thenReturn("Lettuce");
+        when(tomatoMock.getName()).thenReturn("Tomato");
 
         // Настройка типов
-        when(ingredient1Mock.getType()).thenReturn(IngredientType.FILLING);
-        when(ingredient2Mock.getType()).thenReturn(IngredientType.FILLING);
-        when(ingredient3Mock.getType()).thenReturn(IngredientType.SAUCE);
+        when(cheeseMock.getType()).thenReturn(IngredientType.FILLING);
+        when(lettuceMock.getType()).thenReturn(IngredientType.FILLING);
+        when(tomatoMock.getType()).thenReturn(IngredientType.SAUCE);
 
         // Настройка цен
-        when(ingredient1Mock.getPrice()).thenReturn(50f);
-        when(ingredient2Mock.getPrice()).thenReturn(20f);
-        when(ingredient3Mock.getPrice()).thenReturn(10f);
+        when(cheeseMock.getPrice()).thenReturn(50f);
+        when(lettuceMock.getPrice()).thenReturn(20f);
+        when(tomatoMock.getPrice()).thenReturn(10f);
     }
 
     // Добавление ингредиентов
     @Test
-    public void testAddFirstIngredient() {
-        burger.addIngredient(ingredient1Mock);
-        assertEquals(ingredient1Mock, burger.ingredients.get(FIRST_INDEX));
+    public void testAddCheese() {
+        burger.addIngredient(cheeseMock);
+        assertEquals(cheeseMock, burger.ingredients.get(CHEESE_INDEX));
     }
 
     @Test
-    public void testAddSecondIngredient() {
-        burger.addIngredient(ingredient1Mock);
-        burger.addIngredient(ingredient2Mock);
-        assertEquals(ingredient2Mock, burger.ingredients.get(SECOND_INDEX));
+    public void testAddLettuce() {
+        burger.addIngredient(cheeseMock);
+        burger.addIngredient(lettuceMock);
+        assertEquals(lettuceMock, burger.ingredients.get(LETTUCE_INDEX));
     }
 
     @Test
-    public void testAddThirdIngredient() {
-        burger.addIngredient(ingredient1Mock);
-        burger.addIngredient(ingredient2Mock);
-        burger.addIngredient(ingredient3Mock);
-        assertEquals(ingredient3Mock, burger.ingredients.get(THIRD_INDEX));
+    public void testAddTomato() {
+        burger.addIngredient(cheeseMock);
+        burger.addIngredient(lettuceMock);
+        burger.addIngredient(tomatoMock);
+        assertEquals(tomatoMock, burger.ingredients.get(TOMATO_INDEX));
     }
 
     // Удаление ингредиентов
     @Test
-    public void testRemoveSecondIngredient() {
-        burger.addIngredient(ingredient1Mock);
-        burger.addIngredient(ingredient2Mock);
-        burger.addIngredient(ingredient3Mock);
+    public void testRemoveLettuce() {
+        burger.addIngredient(cheeseMock);
+        burger.addIngredient(lettuceMock);
+        burger.addIngredient(tomatoMock);
 
-        // Удаляем второй ингредиент (Lettuce)
-        burger.removeIngredient(SECOND_INDEX);
+        // Удаляем Lettuce
+        burger.removeIngredient(LETTUCE_INDEX);
 
-        // После удаления список: [ingredient1Mock, ingredient3Mock]
-        assertEquals(ingredient3Mock, burger.ingredients.get(SECOND_INDEX));
+        // После удаления список: [cheeseMock, tomatoMock]
+        assertEquals(tomatoMock, burger.ingredients.get(LETTUCE_INDEX));
     }
 
     @Test
-    public void testRemoveFirstIngredient() {
-        burger.addIngredient(ingredient1Mock);
-        burger.addIngredient(ingredient2Mock);
+    public void testRemoveCheese() {
+        burger.addIngredient(cheeseMock);
+        burger.addIngredient(lettuceMock);
 
-        // Удаляем первый ингредиент
-        burger.removeIngredient(FIRST_INDEX);
+        // Удаляем Cheese
+        burger.removeIngredient(CHEESE_INDEX);
 
-        // После удаления список: [ingredient2Mock]
-        assertEquals(ingredient2Mock, burger.ingredients.get(FIRST_INDEX));
+        // После удаления список: [lettuceMock]
+        assertEquals(lettuceMock, burger.ingredients.get(CHEESE_INDEX));
     }
 
     // Перемещение ингредиентов
     @Test
-    public void testMoveThirdIngredientToFirst() {
-        burger.addIngredient(ingredient1Mock);
-        burger.addIngredient(ingredient2Mock);
-        burger.addIngredient(ingredient3Mock);
+    public void testMoveTomatoToFirst() {
+        burger.addIngredient(cheeseMock);
+        burger.addIngredient(lettuceMock);
+        burger.addIngredient(tomatoMock);
 
-        // Перемещаем третий ингредиент (Tomato) на первое место
-        burger.moveIngredient(THIRD_INDEX, FIRST_INDEX);
+        // Перемещаем Tomato на первое место
+        burger.moveIngredient(TOMATO_INDEX, CHEESE_INDEX);
 
-        // Новый порядок: [ingredient3Mock, ingredient1Mock, ingredient2Mock]
-        assertEquals(ingredient3Mock, burger.ingredients.get(FIRST_INDEX));
+        // Новый порядок: [tomatoMock, cheeseMock, lettuceMock]
+        assertEquals(tomatoMock, burger.ingredients.get(CHEESE_INDEX));
     }
 
     @Test
-    public void testMoveFirstIngredientToSecond() {
-        burger.addIngredient(ingredient1Mock);
-        burger.addIngredient(ingredient2Mock);
+    public void testMoveCheeseToSecond() {
+        burger.addIngredient(cheeseMock);
+        burger.addIngredient(lettuceMock);
 
-        // Перемещаем первый ингредиент на второе место
-        burger.moveIngredient(FIRST_INDEX, SECOND_INDEX);
+        // Перемещаем Cheese на второе место
+        burger.moveIngredient(CHEESE_INDEX, LETTUCE_INDEX);
 
-        // Новый порядок: [ingredient2Mock, ingredient1Mock]
-        assertEquals(ingredient1Mock, burger.ingredients.get(SECOND_INDEX));
+        // Новый порядок: [lettuceMock, cheeseMock]
+        assertEquals(cheeseMock, burger.ingredients.get(LETTUCE_INDEX));
     }
 
     // Проверка выброса исключений
     @Test
     public void testRemoveIngredientInvalidIndexThrows() {
-        burger.addIngredient(ingredient1Mock);
+        burger.addIngredient(cheeseMock);
         assertThrows(IndexOutOfBoundsException.class, () -> burger.removeIngredient(INVALID_INDEX));
     }
 
     @Test
     public void testMoveIngredientInvalidIndexThrows() {
-        burger.addIngredient(ingredient1Mock);
-        assertThrows(IndexOutOfBoundsException.class, () -> burger.moveIngredient(FIRST_INDEX, INVALID_INDEX));
+        burger.addIngredient(cheeseMock);
+        assertThrows(IndexOutOfBoundsException.class, () -> burger.moveIngredient(CHEESE_INDEX, INVALID_INDEX));
     }
 }
